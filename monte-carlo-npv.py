@@ -115,6 +115,23 @@ def print_histogram(npvs):
     plt.show()
 
 
+def show_triplets_plot(triplets):
+    test1 = [c - a for c, a, _ in triplets]
+    test2 = [c for c, _, _ in triplets]
+    test3 = [c + a for c, a, _ in triplets]
+
+    base = [i + 1 for i in range(len(triplets))]
+    plt.plot(base, test1, 'ro', label='c - a')
+    plt.plot(base, test2, 'go', label='c')
+    plt.plot(base, test3, 'bo', label='c + a')
+    plt.title('Histogram wartosci npv dla generatora trojkatnego')
+    plt.xlabel('n')
+    plt.legend()
+    plt.ylabel('Wygenerowane wartosci')
+    plt.grid()
+    plt.show()
+
+
 def main():
     # Koszty wejsciowe
     i0 = 500
@@ -122,34 +139,29 @@ def main():
     # c = 300
     # Odchylenie standardowe rozkladu normalnego
     # s = math.sqrt(10)
-    # Ilosc okresow branych pod uwage
-    N = 5
     # Wspolczynnik dyskontowania
     k = 0.05
 
+    # Trójki c, s, h - wartosc oczekiwana, odchylenie standardowe, wysokosc trojkata
     cs_list = [
         (-200, math.sqrt(0.1), 1/50),
-        (-1, math.sqrt(1), 1/50),
-        (50, math.sqrt(10), 1/100),
-        (400, math.sqrt(100), 1/25),
-        (500, math.sqrt(200), 1/20),
-        (700, math.sqrt(250), 1/40),
-        (1000, math.sqrt(90), 1/100),
+        (-50,   math.sqrt(1),   1/50),
+        (-1,   math.sqrt(10),  1/100),
+        (100,  math.sqrt(100), 1/25),
+        (300,  math.sqrt(200), 1/20),
+        (200,  math.sqrt(250), 1/40),
+        (600, math.sqrt(90),  1/100),
     ]
+    # Ilosc okresow branych pod uwage
+    N = len(cs_list)
 
     # Wygenerowane trojki oraz wartosc dystrybuanty
     # lista krotek postaci ((c-a, c, c+a), d)
     triplets = [calculate_single_triangle(c, s, h) for c, s, h in cs_list]
-    from pprint import pprint
-    pprint(triplets)
+    # from pprint import pprint
+    # pprint(triplets)
 
-    test1 = [c - a for c, a, _ in triplets]
-    test2 = [c for c, _, _ in triplets]
-    test3 = [c + a for c, a, _ in triplets]
-
-    plt.plot(test1, 'ro', test2, 'go', test3, 'bo')
-    plt.grid()
-    plt.show()
+    show_triplets_plot(triplets)
 
     npvs = []
     '''
@@ -166,7 +178,7 @@ def main():
         npv_tuple = calculate_npv(cash_flow, k, i0)
         npvs.append(npv_tuple)
 
-    print(len(set(npvs)))
+    # print(len(set(npvs)))
     npvs = np.array(npvs)
     # wartosc oczekiwana npv wg wzoru (2) z [1]
     mean_npv = sum([npvi * pi for npvi, pi in npvs])
