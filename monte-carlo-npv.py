@@ -145,12 +145,12 @@ def main():
     # Trójki c, s, h - wartosc oczekiwana, odchylenie standardowe, wysokosc trojkata
     cs_list = [
         (-200, math.sqrt(0.1), 1/50),
-        (-50,   math.sqrt(1),   1/50),
+        (-50,  math.sqrt(1),   1/50),
         (-1,   math.sqrt(10),  1/100),
         (100,  math.sqrt(100), 1/25),
         (300,  math.sqrt(200), 1/20),
         (200,  math.sqrt(250), 1/40),
-        (600, math.sqrt(90),  1/100),
+        (600,  math.sqrt(90),  1/100),
     ]
     # Ilosc okresow branych pod uwage
     N = len(cs_list)
