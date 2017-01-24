@@ -120,7 +120,7 @@ def print_equation():
 
     def plot_for_h_range(c, s, h_list):
         for h in h_list:
-            rang = np.linspace(-1, 1, 50)
+            rang = np.linspace(-110, 110, 1000)
             points = async.map(lambda x: equation(c, s, h, x), rang)
             plt.plot(rang, points, label=h)
         plt.title('Wykres rownania dla c = %s, s = %s oraz zakresu wartosci h' % (c, s))
@@ -130,18 +130,18 @@ def print_equation():
 
     def plot_for_s_range(c, s_list, h):
         for s in s_list:
-            rang = np.linspace(-1, 1, 50)
+            rang = np.linspace(-110, 110, 1000)
             points = async.map(lambda x: equation(c, s, h, x), rang)
-            plt.plot(rang, points, label=h)
+            plt.plot(rang, points, label=s)
         plt.title('Wykres rownania dla c = %s, h = %s oraz zakresu wartosci s' % (c, h))
         plt.legend()
         plt.grid()
         plt.show()
 
-    s = 200
-    plot_for_h_range(0, s, [1/s, 10/s, 100/s])
-    h = 1/30
-    plot_for_s_range(0, [1/h, 10/h, 100/h], h)
+    s = 20.
+    plot_for_h_range(100, math.sqrt(10), [1/25., 1/50., 1/100.])
+    h = 1./30
+    plot_for_s_range(10, [math.sqrt(10), math.sqrt(100), math.sqrt(1000)], h)
 
 
 def show_triplets_plot(triplets):
@@ -163,23 +163,26 @@ def show_triplets_plot(triplets):
 
 def main():
     # Koszty wejsciowe
-    i0 = 500
+    i0 = 1000000
     # Wartosc oczekiwana rozkladu normalnego
     # c = 300
     # Odchylenie standardowe rozkladu normalnego
     # s = math.sqrt(10)
     # Wspolczynnik dyskontowania
-    k = 0.05
+    k = 0.12
 
     # Trojki c, s, h - wartosc oczekiwana, odchylenie standardowe, wysokosc trojkata
     cs_list = [
-        (-200, math.sqrt(0.1), 1/50),
-        (-50,  math.sqrt(1),   1/50),
-        (-1,   math.sqrt(10),  1/100),
-        (100,  math.sqrt(100), 1/25),
-        (300,  math.sqrt(200), 1/20),
-        (200,  math.sqrt(250), 1/40),
-        (600,  math.sqrt(90),  1/100),
+        (175000, 48621,  1./(2*48621)),
+        (200000, 55395,  1./(2*55395)),
+        (240000, 66868,  1./(2*66868)),
+        (280000, 77805,  1./(2*77805)),
+        (300000, 83546,  1./(2*83546)),
+        (350000, 97141,  1./(2*97141)),
+        (380000, 105168, 1./(2*105168)),
+        (290000, 80514,  1./(2*80514)),
+        (255000, 70185,  1./(2*70185)),
+        (200000, 55918,  1./(2*55918)),
     ]
     # Ilosc okresow branych pod uwage
     N = len(cs_list)
@@ -219,5 +222,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
     print_equation()
+    # main()
