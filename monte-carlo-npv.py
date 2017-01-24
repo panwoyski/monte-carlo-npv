@@ -101,7 +101,7 @@ def print_histogram(npvs):
     npv_values = [npv for npv, _ in npvs]
     print(len(set(npv_values)))
 
-    hist, bins = np.histogram(npv_values, bins=10)
+    hist, bins = np.histogram(npv_values, bins=15)
     width = 0.7 * (bins[1] - bins[0])
     center = (bins[:-1] + bins[1:]) / 2
     fig, ax = plt.subplots()
@@ -222,5 +222,5 @@ def main():
 
 
 if __name__ == '__main__':
-    print_equation()
-    # main()
+    # print_equation()
+    main()
