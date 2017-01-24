@@ -114,7 +114,7 @@ def print_histogram(npvs):
     plt.show()
 
 
-def print_function():
+def print_equation():
     def equation(c, s, h, a):
         return norm.cdf(c - a, c, s) - 0.5 * (1 - a * h)
 
@@ -220,4 +220,4 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    print_function()
+    print_equation()
