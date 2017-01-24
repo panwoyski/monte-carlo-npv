@@ -20,7 +20,7 @@ def calculate_single_triangle(c, s, h):
     if h <= 0:
         raise ValueError("h(n) musi byc wieksze od zera")
     '''
-    Definicja równania którego miejscem zerowym jest wartość a
+    Definicja rownania ktorego miejscem zerowym jest wartosc a
     norm.cdf - wartosc dystrybuanty w punkcie c-a, dla rozkladu normalnego
                o parametrach zdefiniowanych powyzej
     pozostala czesc rownania generowana ze wzoru
@@ -63,7 +63,6 @@ def generate_cash_flow(triplets, choices):
     for index, choice in enumerate(choices):
         c, a, d = triplets[index]
 
-        fcf = 0
         if choice == 0:
             fcf = c - a
         elif choice == 1:
@@ -115,6 +114,36 @@ def print_histogram(npvs):
     plt.show()
 
 
+def print_function():
+    def equation(c, s, h, a):
+        return norm.cdf(c - a, c, s) - 0.5 * (1 - a * h)
+
+    def plot_for_h_range(c, s, h_list):
+        for h in h_list:
+            rang = np.linspace(-1, 1, 50)
+            points = async.map(lambda x: equation(c, s, h, x), rang)
+            plt.plot(rang, points, label=h)
+        plt.title('Wykres rownania dla c = %s, s = %s oraz zakresu wartosci h' % (c, s))
+        plt.legend()
+        plt.grid()
+        plt.show()
+
+    def plot_for_s_range(c, s_list, h):
+        for s in s_list:
+            rang = np.linspace(-1, 1, 50)
+            points = async.map(lambda x: equation(c, s, h, x), rang)
+            plt.plot(rang, points, label=h)
+        plt.title('Wykres rownania dla c = %s, h = %s oraz zakresu wartosci s' % (c, h))
+        plt.legend()
+        plt.grid()
+        plt.show()
+
+    s = 200
+    plot_for_h_range(0, s, [1/s, 10/s, 100/s])
+    h = 1/30
+    plot_for_s_range(0, [1/h, 10/h, 100/h], h)
+
+
 def show_triplets_plot(triplets):
     test1 = [c - a for c, a, _ in triplets]
     test2 = [c for c, _, _ in triplets]
@@ -142,7 +171,7 @@ def main():
     # Wspolczynnik dyskontowania
     k = 0.05
 
-    # Trójki c, s, h - wartosc oczekiwana, odchylenie standardowe, wysokosc trojkata
+    # Trojki c, s, h - wartosc oczekiwana, odchylenie standardowe, wysokosc trojkata
     cs_list = [
         (-200, math.sqrt(0.1), 1/50),
         (-50,  math.sqrt(1),   1/50),
@@ -190,4 +219,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    print_function()
