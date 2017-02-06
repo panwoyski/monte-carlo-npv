@@ -152,7 +152,7 @@ def main():
         (200,  math.sqrt(250), 1/40),
         (600,  math.sqrt(90),  1/100),
     ]
-    probes = 1000
+    probes = 4
 
     from tools import async
 
@@ -160,9 +160,11 @@ def main():
     test_values2 = async.map(lambda _: count_uniform_distribution(cs_list, k, i0), range(probes))
     test_values3 = async.map(lambda _: count_triangle_generator(cs_list, k, i0), range(probes))
 
-    print("Custom method:   %s, %s, %s" % get_mean_values(test_values1))
-    print("Uniform method:  %s, %s, %s" % get_mean_values(test_values2))
-    print("Triangle method: %s, %s, %s" % get_mean_values(test_values3))
+    print("Sampled %s times" % probes)
+    print("                 time_avg, mean avg,   std_dev avg")
+    print("Custom method:   %.6f, %4.6f, %2.6f" % get_mean_values(test_values1))
+    print("Uniform method:  %.6f, %4.6f, %2.6f" % get_mean_values(test_values2))
+    print("Triangle method: %.6f, %4.6f, %2.6f" % get_mean_values(test_values3))
 
 if __name__ == '__main__':
     main()
