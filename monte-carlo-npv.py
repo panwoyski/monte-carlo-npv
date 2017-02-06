@@ -1,5 +1,4 @@
 import numpy as np
-from tools import async
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 import scipy.optimize
@@ -9,6 +8,7 @@ import itertools
 '''
 [1] "THE NPV CRITERION FOR VALUING INVESTMENTS UNDER UNCERTAINTY" - Daniel ARMEANU
 '''
+
 
 def calculate_single_triangle(c, s, h):
     """
