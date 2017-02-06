@@ -132,9 +132,9 @@ def count_triangle_generator(cs_list, k, i0):
 
 
 def get_mean_values(test_values):
-    time = np.array([time for time, _ in test_values]).mean()
-    mean_value = np.array([mean_value for _, (mean_value, _) in test_values]).mean()
-    mean_std_dev = np.array([std_dev for _, (_, std_dev) in test_values]).mean()
+    time = np.array([time for _, time in test_values]).mean()
+    mean_value = np.array([mean_value for (mean_value, _), _ in test_values]).mean()
+    mean_std_dev = np.array([std_dev for (_, std_dev), _ in test_values]).mean()
 
     return time, mean_value, mean_std_dev
 
@@ -154,9 +154,11 @@ def main():
     ]
     probes = 1000
 
-    test_values1 = [count_custom_method(cs_list, k, i0) for _ in range(probes)]
-    test_values2 = [count_uniform_distribution(cs_list, k, i0) for _ in range(probes)]
-    test_values3 = [count_triangle_generator(cs_list, k, i0) for _ in range(probes)]
+    from tools import async
+
+    test_values1 = async.map(lambda _: count_custom_method(cs_list, k, i0), range(probes))
+    test_values2 = async.map(lambda _: count_uniform_distribution(cs_list, k, i0), range(probes))
+    test_values3 = async.map(lambda _: count_triangle_generator(cs_list, k, i0), range(probes))
 
     print("Custom method:   %s, %s, %s" % get_mean_values(test_values1))
     print("Uniform method:  %s, %s, %s" % get_mean_values(test_values2))
