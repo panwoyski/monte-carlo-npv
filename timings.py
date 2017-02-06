@@ -11,8 +11,9 @@ def timed_execution(f):
         start = timer()
         res = f(*args, **kwargs)
         end = timer()
-        print('%s exec time: %.6s' % (f.__name__, end - start))
-        return res
+        exec_time = end - start
+        # print('%s exec time: %.6s' % (f.__name__, exec_time))
+        return res, exec_time
     return decorated
 
 
@@ -78,14 +79,11 @@ def count_custom_method(cs_list, k, i0):
         npv_tuple = calculate_npv(cash_flow, k, i0)
         npvs.append(npv_tuple)
 
-    calculate_params(npvs)
-
-
-def calculate_params(npvs):
     mean_npv = sum([npvi * pi for npvi, pi in npvs])
     # odchylenie standardowe wg wzoru (6) z [1]
     std_dev = np.sqrt(sum(pi * ((npvi - mean_npv)**2) for npvi, pi in npvs))
-    print('custom generator (%.4f, %.4f)' % (mean_npv, std_dev))
+    # print('custom generator (%.4f, %.4f)' % (mean_npv, std_dev))
+    return mean_npv, std_dev
 
 
 def get_uniform_npv(cs_list, i0, k):
@@ -104,7 +102,8 @@ def count_uniform_distribution(cs_list, k, i0):
     normalizing_factor = npvs.shape[0]
     mean_npv = npvs.sum() / normalizing_factor
     std_dev = np.sqrt((np.power(npvs - mean_npv, 2) * 1/normalizing_factor).sum())
-    print("Unifrom distribution (%.4f, %.4f)" % (mean_npv, std_dev))
+    # print("Unifrom distribution (%.4f, %.4f)" % (mean_npv, std_dev))
+    return mean_npv, std_dev
 
 
 def get_npv_from_triangle(triplets, k, i0):
@@ -128,7 +127,16 @@ def count_triangle_generator(cs_list, k, i0):
     mean_npv = npvs.sum() / normalizing_factor
     std_dev = np.sqrt((np.power(npvs - mean_npv, 2) * 1/normalizing_factor).sum())
 
-    print("Triangle distribution (%.4f, %.4f)" % (mean_npv, std_dev))
+    # print("Triangle distribution (%.4f, %.4f)" % (mean_npv, std_dev))
+    return mean_npv, std_dev
+
+
+def get_mean_values(test_values):
+    time = np.array([time for time, _ in test_values]).mean()
+    mean_value = np.array([mean_value for _, (mean_value, _) in test_values]).mean()
+    mean_std_dev = np.array([std_dev for _, (_, std_dev) in test_values]).mean()
+
+    return time, mean_value, mean_std_dev
 
 
 def main():
@@ -144,10 +152,15 @@ def main():
         (200,  math.sqrt(250), 1/40),
         (600,  math.sqrt(90),  1/100),
     ]
+    probes = 1000
 
-    count_custom_method(cs_list, k, i0)
-    count_uniform_distribution(cs_list, k, i0)
-    count_triangle_generator(cs_list, k, i0)
+    test_values1 = [count_custom_method(cs_list, k, i0) for _ in range(probes)]
+    test_values2 = [count_uniform_distribution(cs_list, k, i0) for _ in range(probes)]
+    test_values3 = [count_triangle_generator(cs_list, k, i0) for _ in range(probes)]
+
+    print("Custom method:   %s, %s, %s" % get_mean_values(test_values1))
+    print("Uniform method:  %s, %s, %s" % get_mean_values(test_values2))
+    print("Triangle method: %s, %s, %s" % get_mean_values(test_values3))
 
 if __name__ == '__main__':
     main()
